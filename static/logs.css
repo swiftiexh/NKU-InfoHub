@@ -1,0 +1,37 @@
+.logs-container {
+    width: 700px;
+    margin: 80px auto 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #e0e0e0;
+    padding: 30px 40px 40px 40px;
+}
+.logs-list {
+    margin-top: 18px;
+}
+.log-item {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 0 8px 0;
+}
+.log-query a {
+    font-size: 18px;
+    color: #7e0c6e;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.log-query a:hover {
+    color: #7e0c6e;
+    text-decoration: underline;
+}
+.log-meta {
+    color: #888;
+    font-size: 14px;
+    margin-top: 2px;
+}
+.no-result {
+    color: #a60000;
+    text-align: center;
+    font-size: 18px;
+    margin-top: 40px;
+}

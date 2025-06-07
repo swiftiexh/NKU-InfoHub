@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>注册/登录 - NKU InfoHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-right">
+            <div class="user-menu">
+                <span class="user-name">未登录</span>
+            </div>
+        </div>
+    </div>
+    <div class="auth-container">
+        <div class="title" style="margin-bottom: 10px;">NKU InfoHub</div>
+        <div class="auth-tabs">
+            <div class="auth-tab {% if tab != 'register' %}active{% endif %}" id="login-tab" onclick="showTab('login')">登录</div>
+            <div class="auth-tab {% if tab == 'register' %}active{% endif %}" id="register-tab" onclick="showTab('register')">注册</div>
+        </div>
+        <!-- 登录表单 -->
+        <form class="auth-form {% if tab != 'register' %}active{% endif %}" id="login-form" method="post" action="{{ url_for('auth') }}">
+            <input type="hidden" name="action" value="login">
+            <input type="text" name="username" placeholder="用户名" required>
+            <input type="password" name="password" placeholder="密码" required>
+            {% if login_error %}<div class="auth-error">{{ login_error }}</div>{% endif %}
+            {% if login_success %}<div class="auth-success">{{ login_success }}</div>{% endif %}
+            <button type="submit">登录</button>
+        </form>
+        <!-- 注册表单 -->
+        <form class="auth-form {% if tab == 'register' %}active{% endif %}" id="register-form" method="post" action="{{ url_for('auth') }}" onsubmit="return checkRegisterPwd();">
+            <input type="hidden" name="action" value="register">
+            <input type="text" name="username" placeholder="用户名" required>
+            <input type="password" name="password" id="reg-password" placeholder="密码" required>
+            <input type="password" name="password_confirm" id="reg-password-confirm" placeholder="请再次输入密码" required>
+            <input type="email" name="email" placeholder="邮箱" required>
+            <select name="role" required>
+                <option value="">请选择身份</option>
+                <option value="本科生">本科生</option>
+                <option value="研究生">研究生</option>
+                <option value="博士生">博士生</option>
+                <option value="教师">教师</option>
+            </select>
+            <input type="text" name="college" placeholder="学院">
+            <div id="pwd-error" class="auth-error" style="display:none;"></div>
+            {% if register_error %}<div class="auth-error">{{ register_error }}</div>{% endif %}
+            {% if register_success %}<div class="auth-success">{{ register_success }}</div>{% endif %}
+            <button type="submit">注册</button>
+        </form>
+    </div>
+    <script>
+        function showTab(tab) {
+            document.getElementById('login-form').classList.remove('active');
+            document.getElementById('register-form').classList.remove('active');
+            document.getElementById('login-tab').classList.remove('active');
+            document.getElementById('register-tab').classList.remove('active');
+            if(tab === 'login') {
+                document.getElementById('login-form').classList.add('active');
+                document.getElementById('login-tab').classList.add('active');
+            } else {
+                document.getElementById('register-form').classList.add('active');
+                document.getElementById('register-tab').classList.add('active');
+            }
+        }
+        // 默认tab
+        var defaultTab = "{{ tab|default('login') }}";
+        showTab(defaultTab === "register" ? "register" : "login");
+
+        // 注册密码确认校验
+        function checkRegisterPwd() {
+            var pwd = document.getElementById('reg-password').value;
+            var pwd2 = document.getElementById('reg-password-confirm').value;
+            var err = document.getElementById('pwd-error');
+            if (pwd !== pwd2) {
+                err.style.display = 'block';
+                err.innerText = '两次输入的密码不一致';
+                return false;
+            }
+            err.style.display = 'none';
+            return true;
+        }
+    </script>
+</body>
+</html>

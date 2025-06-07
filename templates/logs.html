@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>查询日志 - NKU InfoHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='logs.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-right">
+            <div class="user-menu">
+                <span class="user-name">{{ user.username if user else '未登录' }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="logs-container">
+        <div class="title" style="margin-bottom: 10px;">查询日志</div>
+        {% if logs %}
+            <div class="logs-list">
+                {% for log in logs %}
+                    <div class="log-item">
+                        <div class="log-query">
+                            <a href="{{ url_for('index') }}?query={{ log.query|urlencode }}&search_in={{ log.search_in }}&sort_by={{ log.sort_by }}" target="_blank">{{ log.query }}</a>
+                        </div>
+                        <div class="log-meta">
+                            搜索范围: {{ log.search_in|default('全部') }} | 排序方式: {{ log.sort_by|default('相关度') }} | {{ log.time }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-result">暂无查询日志</div>
+        {% endif %}
+    </div>
+</body>
+</html>

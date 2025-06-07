@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>NKU InfoHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="navbar">
+        <div class="navbar-right">
+            <div class="user-menu">
+                <span class="user-name">
+                    {% if user %}
+                        {{ user.username }}
+                    {% else %}
+                        未登录
+                    {% endif %}
+                </span>
+                <span class="dropdown-arrow">&#9662;</span>
+                <div class="dropdown-content">
+                    {% if not user %}
+                        <a href="{{ url_for('auth') }}">注册/登录</a>
+                    {% else %}
+                        <a href="{{ url_for('profile') }}">个人信息</a>
+                        <a href="{{ url_for('logs') }}">查询日志</a>
+                        <a href="{{ url_for('logout') }}">退出登录</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- 标题 -->
+        <div class="title">NKU InfoHub</div>
+        <!-- 搜索框和属性 -->
+        <form class="search-form" method="post" action="{{ url_for('index') }}">
+            <div class="search-bar">
+                <input type="text" name="query" value="{{ query or '' }}" placeholder="请输入检索内容" required>
+                <button type="submit">搜索</button>
+                <ul id="suggest-list" class="suggest-list" style="display:none;"></ul>
+            </div>
+            <div class="search-attrs">
+                <label>
+                    搜索模式
+                    <select name="mode" id="mode-select" onchange="toggleFiletypes()">
+                        <option value="basic" {% if mode=='basic' %}selected{% endif %}>站内查询</option>
+                        <option value="document" {% if mode=='document' %}selected{% endif %}>文档查询</option>
+                        <option value="phrase" {% if mode=='phrase' %}selected{% endif %}>短语查询</option>
+                        <option value="wildcard" {% if mode=='wildcard' %}selected{% endif %}>通配查询</option>
+                    </select>
+                </label>
+                <label>
+                    搜索范围
+                    <select name="search_in">
+                        <option value="all" {% if search_in=='all' %}selected{% endif %}>全部</option>
+                        <option value="title" {% if search_in=='title' %}selected{% endif %}>仅标题</option>
+                        <option value="content" {% if search_in=='content' %}selected{% endif %}>仅内容</option>
+                    </select>
+                </label>
+                <label>
+                    结果排序
+                    <select name="sort_by">
+                        <option value="relevance" {% if sort_by=='relevance' %}selected{% endif %}>按相关度排序</option>
+                        <option value="date" {% if sort_by=='date' %}selected{% endif %}>按时间排序</option>
+                    </select>
+                </label>
+                <label style="margin-left:18px;">
+                    <input type="checkbox" name="personalized" value="1" {% if personalized %}checked{% endif %}>
+                    个性化查询
+                </label>
+                <!-- 文档类型多选框，仅在文档查询时显示 -->
+                <span id="filetype-checkboxes" {% if mode != 'document' %}style="display:none;"{% endif %}>
+                    <label><input type="checkbox" name="filetypes" value="pdf" {% if 'pdf' in filetypes %}checked{% endif %}>pdf</label>
+                    <label><input type="checkbox" name="filetypes" value="doc" {% if 'doc' in filetypes %}checked{% endif %}>doc</label>
+                    <label><input type="checkbox" name="filetypes" value="docx" {% if 'docx' in filetypes %}checked{% endif %}>docx</label>
+                    <label><input type="checkbox" name="filetypes" value="xls" {% if 'xls' in filetypes %}checked{% endif %}>xls</label>
+                    <label><input type="checkbox" name="filetypes" value="xlsx" {% if 'xlsx' in filetypes %}checked{% endif %}>xlsx</label>
+                </span>
+            </div>
+        </form>
+
+        <!-- 搜索结果 -->
+        {% if query %}
+        <div class="results">
+            {% if results %}
+                <div class="results-count">共{{ total }}条结果，当前第{{ page }}页</div>
+                {% for item in results %}
+                    <div class="result-item">
+                        <div class="result-title">
+                            <a href="{{ item.url }}" target="_blank">{{ item.title|safe }}</a>
+                        </div>
+                        <div class="result-url">
+                            <a href="{{ item.url }}" target="_blank">{{ item.url }}</a>
+                            {% if item.snapshot_hash %}
+                               <a class="snapshot" href="{{ url_for('snap', snapshot_hash=item.snapshot_hash) }}" target="_blank">快照</a>
+                            {% endif %}
+                            {% if item.snapshot_date %}
+                                <span class="snapshot-date">({{ item.snapshot_date }})</span>
+                            {% endif %}
+                        </div>
+                        {% if item.snippet %}
+                            <div class="result-snippet">{{ item.snippet|safe }}</div>
+                        {% endif %}
+                        <div class="result-meta">
+                            {% if item.source %}<span>{{ item.source }}</span>{% endif %}
+                            {% if item.date %}<span>{{ item.date }}</span>{% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <!-- 分页导航 -->
+                <div class="pagination">
+                    {% for p in page_range %}
+                        {% if p == page %}
+                            <span class="current">{{ p }}</span>
+                        {% else %}
+                            <a href="?query={{ query }}&mode={{ mode }}&search_in={{ search_in }}&sort_by={{ sort_by }}&page={{ p }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-result">未找到相关结果</div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        function toggleFiletypes() {
+            var mode = document.getElementById('mode-select').value;
+            var filetypeDiv = document.getElementById('filetype-checkboxes');
+            if (mode === 'document') {
+                filetypeDiv.style.display = '';
+            } else {
+                filetypeDiv.style.display = 'none';
+            }
+        }
+        // 用户菜单下拉（带延迟，鼠标移到下拉菜单不会立即消失）
+        document.addEventListener('DOMContentLoaded', function() {
+            var userMenu = document.querySelector('.user-menu');
+            var dropdown = userMenu.querySelector('.dropdown-content');
+            var hideTimer = null;
+
+            userMenu.addEventListener('mouseenter', function() {
+                clearTimeout(hideTimer);
+                dropdown.style.display = 'block';
+            });
+            userMenu.addEventListener('mouseleave', function() {
+                hideTimer = setTimeout(function() {
+                    dropdown.style.display = 'none';
+                }, 200); 
+            });
+            dropdown.addEventListener('mouseenter', function() {
+                clearTimeout(hideTimer);
+                dropdown.style.display = 'block';
+            });
+            dropdown.addEventListener('mouseleave', function() {
+                hideTimer = setTimeout(function() {
+                    dropdown.style.display = 'none';
+                }, 200);
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+        var input = document.querySelector('input[name="query"]');
+        var suggestList = document.getElementById('suggest-list');
+        var timer = null;
+
+        input.addEventListener('input', function() {
+            clearTimeout(timer);
+            var q = input.value.trim();
+            if (!q) {
+                suggestList.style.display = 'none';
+                return;
+            }
+            timer = setTimeout(function() {
+                fetch('/suggest?q=' + encodeURIComponent(q))
+                    .then(res => res.json())
+                    .then(data => {
+                        suggestList.innerHTML = '';
+                        if (data.length === 0) {
+                            suggestList.style.display = 'none';
+                            return;
+                        }
+                        data.forEach(function(item) {
+                            var li = document.createElement('li');
+                            li.textContent = item;
+                            li.onclick = function() {
+                                input.value = item;
+                                suggestList.style.display = 'none';
+                            };
+                            suggestList.appendChild(li);
+                        });
+                        suggestList.style.display = 'block';
+                    });
+            }, 150); // 防抖
+        });
+
+        // 点击外部关闭
+        document.addEventListener('click', function(e) {
+            if (!suggestList.contains(e.target) && e.target !== input) {
+                suggestList.style.display = 'none';
+            }
+        });
+    });
+    </script>
+</body>
+</html>

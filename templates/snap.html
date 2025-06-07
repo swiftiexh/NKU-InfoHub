@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>快照 - {{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='snap.css') }}">
+</head>
+<body>
+    <div class="main-container snap-container">
+        <div class="snap-meta">
+            <div class="snap-info">
+                <span>原始网址：<a href="{{ url }}" target="_blank">{{ url }}</a></span><br>
+                <span>快照时间：{{ captured_at }}</span>
+                {% if source %}
+                <span style="margin-left:24px;">来源：{{ source }}</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="snap-html">
+            {{ raw_html|safe }}
+        </div>
+    </div>
+</body>
+</html>

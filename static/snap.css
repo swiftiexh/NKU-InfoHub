@@ -1,0 +1,40 @@
+.snap-container {
+    padding: 30px 40px 40px 40px;
+    margin-top: 80px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #e0e0e0;
+    width: 900px;
+    min-height: 400px;
+}
+
+.snap-meta {
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 16px;
+}
+
+
+.snap-info {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.8;
+}
+
+.snap-info a {
+    color: #008000;
+    word-break: break-all;
+}
+
+.back-btn:hover {
+    background: #7e0c6e;
+}
+
+.snap-html {
+    margin-top: 24px;
+    background: #f7f7fb;
+    border-radius: 6px;
+    padding: 18px 18px 18px 18px;
+    min-height: 300px;
+    overflow-x: auto;
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息 - NKU InfoHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-right">
+            <div class="user-menu">
+                <span class="user-name">{{ user.username if user else '未登录' }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="profile-container">
+        <div class="title" style="margin-bottom: 10px;">个人信息</div>
+        <form class="profile-form" method="post" action="{{ url_for('profile') }}">
+            <div class="profile-row">
+                <label>用户名：</label>
+                <span class="profile-static">{{ user.username }}</span>
+            </div>
+            <div class="profile-row">
+                <label for="age">年龄：</label>
+                <input type="number" id="age" name="age" min="0" max="120" value="{{ profile.age or '' }}">
+            </div>
+            <div class="profile-row">
+                <label>身份：</label>
+                <span class="profile-static">{{ user.role }}</span>
+            </div>
+            <div class="profile-row">
+                <label for="email">邮箱：</label>
+                <input type="email" id="email" name="email" value="{{ user.email or '' }}">
+            </div>
+            <div class="profile-row">
+                <label for="college">学院：</label>
+                <input type="text" id="college" name="college" value="{{ profile.college or '' }}">
+            </div>
+            {% if user.role in ['本科生', '研究生', '博士生'] %}
+            <div class="profile-row">
+                <label for="major">专业：</label>
+                <input type="text" id="major" name="major" value="{{ profile.major or '' }}">
+            </div>
+            <div class="profile-row">
+                <label for="grade">年级：</label>
+                <input type="text" id="grade" name="grade" value="{{ profile.grade or '' }}">
+            </div>
+            {% elif user.role == '教师' %}
+            <div class="profile-row">
+                <label for="research">研究方向：</label>
+                <input type="text" id="research" name="research" value="{{ profile.research or '' }}">
+            </div>
+            {% endif %}
+            {% if update_success %}
+                <div class="profile-success">{{ update_success }}</div>
+            {% endif %}
+            {% if update_error %}
+                <div class="profile-error">{{ update_error }}</div>
+            {% endif %}
+            <button type="submit" class="profile-btn">保存修改</button>
+        </form>
+    </div>
+</body>
+</html>

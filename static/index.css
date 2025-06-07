@@ -1,0 +1,285 @@
+body {
+    background: #fafbfc;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    width: 100%;
+    height: 48px;
+    background: #fff;
+    box-shadow: 0 2px 8px #e0e0e0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.navbar-right {
+    margin-right: 60px;
+}
+
+.user-menu {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 16px;
+    color: #7e0c6e;
+}
+
+.user-name {
+    font-weight: bold;
+    margin-right: 6px;
+}
+
+.dropdown-arrow {
+    font-size: 12px;
+    margin-left: 2px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 28px;
+    background: #fff;
+    min-width: 120px;
+    box-shadow: 0 2px 8px #e0e0e0;
+    border-radius: 4px;
+    z-index: 200;
+}
+
+.dropdown-content a {
+    display: block;
+    color: #7e0c6e;
+    padding: 10px 18px;
+    text-decoration: none;
+    font-size: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s;
+}
+
+.dropdown-content a:last-child {
+    border-bottom: none;
+}
+
+.dropdown-content a:hover {
+    background: #f0f4ff;
+}
+
+.main-container {
+    width: 800px;
+    margin: 80px auto 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #e0e0e0;
+    padding: 30px 40px 40px 40px;
+}
+
+.title {
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    color: #7e0c6e;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+.search-form {
+    margin-bottom: 25px;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.search-bar input[type="text"] {
+    width: 420px;
+    height: 38px;
+    font-size: 18px;
+    padding: 0 12px;
+    border: 1px solid #bfc6d1;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+.search-bar button {
+    height: 40px;
+    width: 80px;
+    font-size: 18px;
+    background: #7e0c6e;
+    color: #fff;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.search-bar button:hover {
+    background: #7e0c6e;
+}
+
+.search-attrs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    font-size: 15px;
+    color: #333;
+}
+
+.search-attrs label {
+    margin-right: 8px;
+}
+
+#filetype-checkboxes label {
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.results {
+    margin-top: 30px;
+}
+
+.results-count {
+    color: #888;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.result-item {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 18px 0 10px 0;
+}
+
+.result-title a {
+    font-size: 20px;
+    font-weight: bold;
+    color: #7e0c6e;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.result-title a:hover {
+    color: #7e0c6e;
+    text-decoration: underline;
+}
+
+.result-url {
+    color: #008000;
+    font-size: 13px;
+    margin: 3px 0 2px 0;
+    word-break: break-all;
+}
+
+.snapshot {
+    color: #7e0c6e;
+    margin-left: 8px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.snapshot-date {
+    color: #888;
+    font-size: 12px;
+    margin-left: 4px;
+}
+
+.result-snippet {
+    font-size: 15px;
+    color: #222;
+    margin: 5px 0 2px 0;
+    line-height: 1.6;
+}
+
+.result-meta {
+    color: #888;
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.pagination {
+    margin: 18px 0 0 0;
+    text-align: center;
+}
+
+.pagination a, .pagination span.current {
+    display: inline-block;
+    min-width: 28px;
+    padding: 4px 8px;
+    margin: 0 2px;
+    border-radius: 3px;
+    font-size: 15px;
+    color: #7e0c6e;
+    text-decoration: none;
+    border: 1px solid #e0e0e0;
+    background: #f7f7fb;
+    transition: background 0.2s;
+}
+
+.pagination span.current {
+    background: #7e0c6e;
+    color: #fff;
+    border: 1px solid #7e0c6e;
+    font-weight: bold;
+}
+
+.pagination a:hover {
+    background: #e0e0f7;
+}
+
+.no-result {
+    color: #a60000;
+    text-align: center;
+    font-size: 18px;
+    margin-top: 40px;
+}
+
+mark, .highlight {
+    background: #ffffcc;
+    color: #a60000;
+    font-weight: bold;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+.search-bar {
+    position: relative;
+}
+
+.suggest-list {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #c6d1e9;
+    border-radius: 6px;
+    z-index: 1000;
+    max-height: 260px;
+    overflow-y: auto;
+    box-shadow: 0 2px 8px #e0e0e0;
+    margin-top: 2px;
+    padding: 0;
+    list-style: none;
+}
+
+.suggest-list li {
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.suggest-list li:hover {
+    background: #f0f4ff;
+}
